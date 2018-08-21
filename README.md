@@ -35,6 +35,11 @@ ___
 go run ./main.go
 # or
 go build -o build.exe && ./build.exe
+
+# Cloud SQL
+# Run the proxy
+# TCP SOCKETS
+cloud_sql_proxy.exe -instances=tsiahpng-golang:asia-east1:cloudsql=tcp:3306
 ```
 
 #### Deploy using Google Cloud SDK
