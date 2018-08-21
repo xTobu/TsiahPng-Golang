@@ -44,7 +44,7 @@ func DBGetStudents() (data []Student, count int) {
 	db := dbGetConn()
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM `TsiahPng_db`.`School`")
+	rows, err := db.Query("SELECT * FROM `School`")
 
 	defer rows.Close()
 
