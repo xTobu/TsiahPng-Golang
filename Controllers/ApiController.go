@@ -1,20 +1,19 @@
 package controllers
 
 import (
+	models "TsiahPng-Golang/Models"
 	"net/http"
-
-	"Site-Golang/Models"
 
 	"github.com/gin-gonic/gin"
 )
 
 //APIStudent use mysql
 func APIStudent(c *gin.Context) {
-	if res, count := Models.DBGetStudents(); count > 0 {
-		n := Models.Students{Students: res}
+	if res, count := models.DBGetStudents(); count > 0 {
+		n := models.Students{Students: res}
 		c.JSON(http.StatusOK, n)
 	} else {
-		n := Models.Students{}
+		n := models.Students{}
 		c.JSON(http.StatusOK, n)
 		// c.JSON(http.StatusNoContent)
 	}
@@ -45,7 +44,7 @@ func APIInsert(c *gin.Context) {
 		return
 	}
 	// c.Request.FormValue("email")
-	if r := Models.DBInsertStudent(studentData.Name, studentData.Email); r == true {
+	if r := models.DBInsertStudent(studentData.Name, studentData.Email); r == true {
 		c.JSON(http.StatusOK, gin.H{
 			"result": "success",
 		})

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"Site-Golang/Models"
+	models "TsiahPng-Golang/Models"
 	"log"
 	"net/http"
 	"strings"
@@ -20,7 +20,7 @@ func fatal(err error) {
 //AuthLogin 登入 使用go-jwt取得Token
 func AuthLogin(c *gin.Context) {
 
-	// var user Models.UserCredentials
+	// var user models.UserCredentials
 	// c.Bind(&user)
 	// if c.Bind(&user) == nil {
 	// 	log.Println("====== Bind By Query String ======")
@@ -35,7 +35,7 @@ func AuthLogin(c *gin.Context) {
 	// }
 
 	//判斷body Form
-	var user Models.UserCredentials
+	var user models.UserCredentials
 	// err := json.NewDecoder(c.Request.Body).Decode(&user)
 	err := c.Bind(&user)
 	if err != nil {
@@ -46,7 +46,7 @@ func AuthLogin(c *gin.Context) {
 	}
 
 	//判斷資料正確
-	if (strings.ToLower(user.Username) != Models.Username) || (user.Password != Models.Password) {
+	if (strings.ToLower(user.Username) != models.Username) || (user.Password != models.Password) {
 		c.JSON(http.StatusForbidden, gin.H{
 			"result": "Error logging in",
 		})
@@ -75,7 +75,7 @@ func AuthLogin(c *gin.Context) {
 		fatal(err)
 	}
 
-	tokenString, err := token.SignedString([]byte(Models.SecretKey))
+	tokenString, err := token.SignedString([]byte(models.SecretKey))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"result": "Error while signing the token",
