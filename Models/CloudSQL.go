@@ -25,7 +25,7 @@ func dbGetConn() *sql.DB {
 	ConnectionStr := os.Getenv("MYSQL_CONNECTION")
 
 	//本機
-	ConnectionStr = "Junxiang:rmp4vu;6@tcp(127.0.0.1:3306)/TsiahPng_db"
+	// ConnectionStr = "Junxiang:rmp4vu;6@tcp(127.0.0.1:3306)/TsiahPng_db"
 
 	db, err := sql.Open("mysql", ConnectionStr)
 	if err != nil {
