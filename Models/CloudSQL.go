@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -91,16 +90,19 @@ func DBInsertStudent(name string, email string) (r bool) {
 	/////////////////////////////////////////
 
 	//https://www.jianshu.com/p/340eb943be2e
-	//https://studygolang.com/articles/3022  //方式4  Begin函数内部会去获取连接  多筆新增時效率高
+	//https://studygolang.com/articles/3022
+	//方式4  Begin函数内部会去获取连接  多筆新增時效率高
 	/////////////////////////////////////////
-	query := fmt.Sprintf("INSERT INTO `TsiahPng_db`.`School` (`name`,`email`,`CreatedTime`) VALUES('%s','%s','%s')", name, email, getTime())
+	// query := fmt.Sprintf("INSERT INTO `School` (`name`,`email`,`CreatedTime`) VALUES('%s','%s','%s')", name, email, getTime())
 
 	//Begin函数内部会去获取连接
 	tx, err := db.Begin()
 	errCheck(err)
 
 	//每次循环用的都是tx内部的连接，没有新建连接，效率高
-	rs, err := tx.Exec(query)
+	// rs, err := tx.Exec(query)
+	rs, err := tx.Exec("INSERT INTO `School` (`name`,`email`,`CreatedTime`) VALUES(?, ?, ?)", name, email, getTime())
+
 	errCheck(err)
 
 	//最后释放tx内部的连接
