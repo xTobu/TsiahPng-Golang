@@ -1,0 +1,345 @@
+swagger: "2.0"
+info:
+    description: 2018 滾石 Media Tech 活動站的API
+    version: 1.0.0
+    title: "[2018][滾石] - Media Tech"
+
+# Added by API Auto Mocking Plugin
+host: mediatech2018.webgene.com.tw
+basePath: /api
+#securityDefinitions:
+#  Bearer:
+#    type: apiKey
+#    name: Authorization
+#    in: header
+
+schemes:
+    - https
+
+tags:
+    - name: Site
+      description: MediaTech 活動站
+    - name: Admin
+      description: MediaTech 後台
+    - name: JWT
+      description: JSON Web Tokens
+    - name: Google reCAPTCHA
+      description: Protects site from spam and abuse
+
+paths:
+    /Submit:
+        post:
+            tags:
+                - Site
+            summary: 送出前台的報名資料
+            produces:
+                - application/json
+            parameters:
+                - in: body
+                  name: body
+                  description: Rrequest's json data
+                  required: true
+                  schema:
+                      $ref: "#/definitions/Submit_POST_req"
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/Submit_POST_res"
+                "400":
+                    description: Bad Request
+                    schema:
+                        $ref: "#/definitions/Submit_POST_res"
+
+    /Persons:
+        get:
+            tags:
+                - Admin
+            summary: 取得所有人的資料
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/Persons_GET_res"
+                "500":
+                    description: Internal Server Error
+
+    /SendEmail:
+        put:
+            tags:
+                - Admin
+            summary: 寄出信件、修改 Person 寄信與付款狀態
+            produces:
+                - application/json
+            parameters:
+                - in: body
+                  name: body
+                  description: 欲寄信的信箱與其GUID
+                  required: true
+                  schema:
+                      $ref: "#/definitions/SendEmail_PUT_req"
+            responses:
+                200:
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/SendEmail_PUT_res"
+                400:
+                    description: Bad Request
+                    schema:
+                        $ref: "#/definitions/SendEmail_PUT_res"
+
+    /JWT/Login:
+        post:
+            tags:
+                - JWT
+            summary: 登入並取得 Token
+            produces:
+                - application/json
+            parameters:
+                - in: body
+                  name: body
+                  description: 帳號與密碼
+                  required: true
+                  schema:
+                      type: object
+                      required:
+                          - Username
+                          - Password
+                      properties:
+                          Username:
+                              type: string
+                              example: ""
+                          Password:
+                              type: string
+                              example: ""
+
+            responses:
+                200:
+                    description: OK
+                    schema:
+                        type: object
+                        properties:
+                            code:
+                                type: integer
+                            data:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+
+                400:
+                    description: Bad Request
+    /JWT/Logout:
+        post:
+            tags:
+                - JWT
+            summary: 登出
+            produces:
+                - application/json
+            responses:
+                200:
+                    description: OK
+                    schema:
+                        type: object
+                        properties:
+                            code:
+                                type: integer
+
+                400:
+                    description: Bad Request
+    /JWT/Authorization:
+        get:
+            tags:
+                - JWT
+            summary: 驗證 JWT Token
+
+            #security:
+            #  - Bearer: []
+            parameters:
+                - in: header
+                  name: Authorization
+                  type: string
+                  required: true
+                  description: "Bearer &lt;token&gt;"
+
+            responses:
+                200:
+                    description: OK
+
+                401:
+                    description: Unauthorized
+                    schema:
+                        properties:
+                            message:
+                                type: string
+
+    /Recaptcha/Verify:
+        post:
+            tags:
+                - Google reCAPTCHA
+            summary: 驗證 Google reCAPTCHA token
+            produces:
+                - application/json
+            parameters:
+                - in: body
+                  name: body
+                  required: true
+                  description: your reCAPTCHA token
+                  schema:
+                      type: object
+                      required:
+                          - response
+                      properties:
+                          response:
+                              type: string
+
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+
+definitions:
+    #Submit
+    Submit_POST_req:
+        type: object
+        properties:
+            Company:
+                type: object
+                properties:
+                    name:
+                        type: string
+                        example: "Company_name"
+                    taxid:
+                        type: string
+                        example: "Company_taxid"
+                    receipt:
+                        type: string
+                        example: "Company_receipt"
+            Contact:
+                type: object
+                properties:
+                    name:
+                        type: string
+                        example: "Contact_name"
+                    phone:
+                        type: string
+                        example: "Contact_phone"
+                    ext:
+                        type: string
+                        example: "Contact_ext"
+                    email:
+                        type: string
+                        example: "Contact_email"
+                    city:
+                        type: string
+                        example: "Contact_city"
+                    district:
+                        type: string
+                        example: "Contact_district"
+                    address:
+                        type: string
+                        example: "Contact_address"
+            Tickets:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        type:
+                            type: integer
+                        count:
+                            type: integer
+                example:
+                    - type: 0
+                      count: 1
+                    - type: 1
+                      count: 3
+                    - type: 2
+                      count: 0
+            remarks:
+                type: string
+                example: "備註備註備註備註備註備註備註備註備註備註備註備註備註備註備註備註"
+            payment_method:
+                type: string
+                example: "credit"
+            payment_account:
+                type: string
+                example: null
+
+    Submit_POST_res:
+        type: object
+        properties:
+            status:
+                type: boolean
+            message:
+                type: string
+
+    #Persons
+    Persons_GET_res:
+        type: array
+        items:
+            type: object
+            properties:
+                id:
+                    type: integer
+                guid:
+                    type: string
+                contact_name:
+                    type: string
+                contact_phone:
+                    type: string
+                contact_email:
+                    type: string
+                company_name:
+                    type: string
+                company_taxid:
+                    type: string
+                company_address:
+                    type: string
+                payment_account:
+                    type: integer
+                vegetarian:
+                    type: integer
+                non_vegetarian:
+                    type: integer
+                wasPaid:
+                    type: boolean
+                wasSentLetter:
+                    type: boolean
+                ip:
+                    type: string
+                CreatedTime:
+                    type: string
+                Tickets:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            ticket_type:
+                                type: integer
+                            ticket_count:
+                                type: integer
+                            ticket_amount:
+                                type: integer
+
+    #SendEmail/{guid}
+
+    SendEmail_PUT_req:
+        type: object
+        properties:
+            guid:
+                type: string
+                example: "b643caaae4204928873ae55c51e2dacc"
+            address:
+                type: string
+                example: "jun_huang@webgene.com.tw"
+
+    SendEmail_PUT_res:
+        type: object
+        properties:
+            guid:
+                type: string
+            status:
+                type: string
+            message:
+                type: string
