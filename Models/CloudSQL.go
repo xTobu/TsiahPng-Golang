@@ -20,14 +20,21 @@ type Students struct {
 	Students []Student `json:"students"`
 }
 
+func dialSQL() (*sql.DB, error) {
+	ConnectionStr := ""
+	if os.Getenv("PROJECT_ID") == "tsiahpng" {
+		//google cloud sql
+		ConnectionStr = os.Getenv("CLOUD_CONNECTION")
+	} else {
+		//本機
+		ConnectionStr = "Junxiang:rmp4vu;6@tcp(127.0.0.1:3306)/TsiahPng_db"
+	}
+
+	return sql.Open("mysql", ConnectionStr)
+}
 func dbGetConn() *sql.DB {
-	//google cloud sql
-	ConnectionStr := os.Getenv("MYSQL_CONNECTION")
 
-	//本機
-	// ConnectionStr = "Junxiang:rmp4vu;6@tcp(127.0.0.1:3306)/TsiahPng_db"
-
-	db, err := sql.Open("mysql", ConnectionStr)
+	db, err := dialSQL()
 	if err != nil {
 		log.Fatal("Open connection failed:", err.Error())
 	}
