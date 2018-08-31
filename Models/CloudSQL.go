@@ -27,7 +27,9 @@ func dialSQL() (*sql.DB, error) {
 		ConnectionStr = os.Getenv("CLOUD_CONNECTION")
 	} else {
 		//本機
-		ConnectionStr = "Junxiang:rmp4vu;6@tcp(127.0.0.1:3306)/TsiahPng_db"
+		// ConnectionStr = "Junxiang:rmp4vu;6@tcp(127.0.0.1:3306)/TsiahPng_db"
+		ConnectionStr = "root:@tcp(127.0.0.1:3306)/TsiahPng_db"
+
 	}
 
 	return sql.Open("mysql", ConnectionStr)
@@ -124,6 +126,46 @@ func DBInsertStudent(name string, email string) (r bool) {
 	r = true
 	return r
 
+}
+
+//Restaurant Restaurant
+type Restaurant struct {
+	ID      int    `json:"id,omitempty"`
+	Img     string `json:"img,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Price   string `json:"price,omitempty"`
+	Purpose string `json:"purpose,omitempty"`
+}
+
+// Restaurants is a slice of Restaurant
+type Restaurants struct {
+	Restaurants []Restaurant `json:"data"`
+}
+
+// TsiahPngGetList MySQL 取得所有餐廳資料
+func TsiahPngGetList() (data []Restaurant, count int) {
+	db := dbGetConn()
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM `restaurants_list`")
+
+	defer rows.Close()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for rows.Next() {
+		var restaurant Restaurant
+		rows.Scan(&restaurant.ID, &restaurant.Img, &restaurant.Name, &restaurant.Price, &restaurant.Purpose)
+		data = append(data, restaurant)
+		count++
+	}
+	if err = rows.Err(); err != nil {
+		log.Fatalln(err)
+	}
+	//getTime()
+	return data, count
 }
 
 //取得時間並format

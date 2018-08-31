@@ -1,11 +1,11 @@
 swagger: "2.0"
 info:
-    description: 2018 滾石 Media Tech 活動站的API
-    version: 1.0.0
-    title: "[2018][滾石] - Media Tech"
+    description: 中午吃什麼
+    version: 0.0.0
+    title: "[2018][WebGene] - TsiahPng"
 
 # Added by API Auto Mocking Plugin
-host: mediatech2018.webgene.com.tw
+host: localhost:8080
 basePath: /api
 #securityDefinitions:
 #  Bearer:
@@ -14,7 +14,7 @@ basePath: /api
 #    in: header
 
 schemes:
-    - https
+    - http
 
 tags:
     - name: Site
@@ -198,6 +198,33 @@ paths:
                     description: OK
                 401:
                     description: Unauthorized
+                  
+    /tsiahpng/RestaurantsList:
+        get:
+            tags:
+                - TsiahPng Site
+            summary: 取得餐廳列表
+            responses:
+                200:
+                    description: OK
+                    schema:
+                        type: object
+                        properties:
+                            data:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        id:
+                                            type: integer
+                                        img:
+                                            type: string
+                                        name:
+                                            type: string
+                                        price:
+                                            type: string
+                                        purpose:
+                                            type: string
 
 definitions:
     #Submit

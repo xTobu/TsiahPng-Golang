@@ -50,7 +50,12 @@ func RouteConfig() {
 
 		api.GET("/checktoken", controllers.AuthCheckToken)
 		//api.OPTIONS("/checktoken", controllers.AuthCheckToken)
+		//group： api
+		tsiahpng := api.Group("/tsiahpng")
+		{
+			tsiahpng.GET("/RestaurantsList", controllers.TsiahPngGetList)
 
+		}
 	}
 
 	//group： auth
