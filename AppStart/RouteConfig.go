@@ -54,6 +54,7 @@ func RouteConfig() {
 		tsiahpng := api.Group("/tsiahpng")
 		{
 			tsiahpng.GET("/RestaurantsList", controllers.TsiahPngGetList)
+			tsiahpng.POST("/RestaurantAdd", controllers.TsiahPngRestaurantInsert)
 
 		}
 	}

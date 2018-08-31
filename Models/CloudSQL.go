@@ -168,6 +168,37 @@ func TsiahPngGetList() (data []Restaurant, count int) {
 	return data, count
 }
 
+// DBInsertRestaurant MySQL 新增一筆餐廳資料
+func DBInsertRestaurant(name string, price string, purpose string) (r bool) {
+
+	//開啟db
+	db := dbGetConn()
+	defer db.Close()
+
+	//Begin函数内部会去获取连接
+	tx, err := db.Begin()
+	errCheck(err)
+
+	//每次循环用的都是tx内部的连接，没有新建连接，效率高
+	// rs, err := tx.Exec(query)
+	rs, err := tx.Exec("INSERT INTO `restaurants_list` (`img`,`name`,`price`,`purpose`) VALUES(?, ?, ?, ?)", "no-image", name, price, purpose)
+
+	errCheck(err)
+
+	//最后释放tx内部的连接
+	tx.Commit()
+
+	rowCount, err := rs.RowsAffected()
+	errCheck(err)
+
+	log.Printf("inserted %d rows", rowCount)
+	/////////////////////////////////////////
+
+	r = true
+	return r
+
+}
+
 //取得時間並format
 func getTime() (r string) {
 	//p := fmt.Println

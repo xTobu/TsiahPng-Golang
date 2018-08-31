@@ -19,6 +19,38 @@ func TsiahPngGetList(c *gin.Context) {
 
 }
 
+// RestaurantReq struct
+type RestaurantReq struct {
+	Name    string `form:"name" json:"name"`
+	Price   string `form:"price" json:"price"`
+	Purpose string `form:"purpose" json:"purpose"`
+}
+
+//TsiahPngRestaurantInsert use mysql handler 新增一筆餐廳資料
+func TsiahPngRestaurantInsert(c *gin.Context) {
+	var req RestaurantReq
+
+	// err := json.NewDecoder(c.Request.Body).Decode(&req)
+	err := c.Bind(&req)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{
+			"result": "Error in request",
+		})
+		return
+	}
+	// c.Request.FormValue("email")
+	if r := models.DBInsertRestaurant(req.Name, req.Price, req.Purpose); r == true {
+		c.JSON(http.StatusOK, gin.H{
+			"result": "success",
+		})
+	} else {
+		c.JSON(http.StatusForbidden, gin.H{
+			"result": "fail",
+		})
+		// c.JSON(http.StatusNoContent)
+	}
+}
+
 // //StudentReq struct
 // type StudentReq struct {
 // 	Name  string `form:"name" json:"name"`
