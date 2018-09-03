@@ -181,7 +181,7 @@ func DBInsertRestaurant(name string, price string, purpose string) (r bool) {
 
 	//每次循环用的都是tx内部的连接，没有新建连接，效率高
 	// rs, err := tx.Exec(query)
-	rs, err := tx.Exec("INSERT INTO `restaurants_list` (`img`,`name`,`price`,`purpose`) VALUES(?, ?, ?, ?)", "no-image", name, price, purpose)
+	rs, err := tx.Exec("INSERT INTO `restaurants_list` (`img`,`name`,`price`,`purpose`) VALUES(?, ?, ?, ?)", "no-image.jpg", name, price, purpose)
 
 	errCheck(err)
 
