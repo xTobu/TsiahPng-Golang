@@ -139,7 +139,7 @@ type Restaurant struct {
 
 // Restaurants is a slice of Restaurant
 type Restaurants struct {
-	Restaurants []Restaurant `json:"data"`
+	Restaurants []Restaurant `json:"Restaurants"`
 }
 
 // TsiahPngGetList MySQL 取得所有餐廳資料

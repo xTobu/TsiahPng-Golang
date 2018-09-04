@@ -41,7 +41,7 @@ func RouteConfig() {
 	//group： api
 	api := router.Group("/api")
 	// api.Use(middlewares.CORSMiddleware())
-	// api.Use(middlewares.ValidateTokenMiddleware())
+	api.Use(middlewares.ValidateTokenMiddleware())
 	{
 		api.GET("/get", controllers.APIStudent)
 		//api.OPTIONS("/get", controllers.APIStudent)
