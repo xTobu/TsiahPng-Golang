@@ -41,9 +41,10 @@ func RouteConfig() {
 	//group： api
 	api := router.Group("/api")
 	// api.Use(middlewares.CORSMiddleware())
-	api.Use(middlewares.ValidateTokenMiddleware())
+	// api.Use(middlewares.ValidateTokenMiddleware())
 	{
 		api.GET("/get", controllers.APIStudent)
+		api.GET("/getRestaurantsList", controllers.TsiahPngGetList)
 		//api.OPTIONS("/get", controllers.APIStudent)
 
 		api.POST("/post", controllers.APIInsert)
@@ -52,6 +53,7 @@ func RouteConfig() {
 		//api.OPTIONS("/checktoken", controllers.AuthCheckToken)
 		//group： api
 		tsiahpng := api.Group("/tsiahpng")
+		tsiahpng.Use(middlewares.ValidateTokenMiddleware())
 		{
 			tsiahpng.GET("/RestaurantsList", controllers.TsiahPngGetList)
 			tsiahpng.POST("/RestaurantAdd", controllers.TsiahPngRestaurantInsert)
